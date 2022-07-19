@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static IdentityModel.OidcConstants;
 using System.Security.Claims;
+using IdentityServer4;
 
 namespace AuthServer
 {
@@ -72,7 +73,17 @@ namespace AuthServer
                             ClientSecrets = { new Secret("halkbank".Sha256()) },
                             AllowedGrantTypes = { GrantType.ClientCredentials },
                             AllowedScopes = { "HalkBank.Write", "HalkBank.Read" }
-                        }
+                        },
+                    new Client
+                    {
+                        ClientId = "OnlineBankamatik",
+                        ClientName = "OnlineBankamatik",
+                        ClientSecrets = { new Secret("onlinebankamatik".Sha256()) },
+                        AllowedGrantTypes = IdentityServer4.Models.GrantTypes.Hybrid, //"code id_token'a karşılık gelen"
+                        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
+                        RedirectUris = { "https://localhost:4000/signin-oidc" },
+                        RequirePkce = false
+                    }
             };
         }
         #endregion
@@ -85,5 +96,14 @@ namespace AuthServer
 
             };
         }
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile()
+            };
+        }
+
     }
 }
