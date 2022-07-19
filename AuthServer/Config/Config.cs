@@ -73,6 +73,7 @@ namespace AuthServer
                             ClientSecrets = { new Secret("halkbank".Sha256()) },
                             AllowedGrantTypes = { GrantType.ClientCredentials },
                             AllowedScopes = { "HalkBank.Write", "HalkBank.Read" }
+                            //AccessTokenLifetime =  2*60*60
                         },
                     new Client
                     {
@@ -80,9 +81,12 @@ namespace AuthServer
                         ClientName = "OnlineBankamatik",
                         ClientSecrets = { new Secret("onlinebankamatik".Sha256()) },
                         AllowedGrantTypes = IdentityServer4.Models.GrantTypes.Hybrid, //"code id_token'a karşılık gelen"
-                        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile },
-                        RedirectUris = { "https://localhost:4000/signin-oidc" },
-                        RequirePkce = false
+                        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess },RedirectUris = { "https://localhost:4000/signin-oidc" },
+                        RequirePkce = false,
+                        AllowOfflineAccess = true,
+                        RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                        RefreshTokenExpiration = TokenExpiration.Absolute,
+                        AbsoluteRefreshTokenLifetime = 2 * 60 * 60 + (10 * 60)
                     }
             };
         }

@@ -37,6 +37,8 @@ namespace OnlineBankamatik
                 _.ClientSecret = "onlinebankamatik";
                 _.ResponseType = "code id_token";
                 _.GetClaimsFromUserInfoEndpoint = false;
+                _.SaveTokens = true; //Auth server’dan ilgili access token deðeri client tarafýndan elde edilmiþ olacaktýr.
+                _.Scope.Add("offline_access");
             });
             services.AddControllersWithViews();
         }
