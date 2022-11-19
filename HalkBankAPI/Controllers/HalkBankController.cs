@@ -14,6 +14,7 @@ namespace HalkBankAPI.Controllers
     public class HalkBankController : ControllerBase
     {
         [HttpGet("{musteriID}")]
+        [Authorize(Policy = "ReadWriteHalkBank")]
         public double Bakiye(int musteriId)
         {
             //....
