@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
-    <PackageReference Include="IdentityServer4.Contrib.Caching.Redis" Version="3.1.1" />
+    <PackageReference Include="IdentityServer4.Contrib.RedisStore" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

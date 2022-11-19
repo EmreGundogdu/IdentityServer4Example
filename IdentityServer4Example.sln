@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalkBankAPI", "HalkBankAPI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "AuthServer\AuthServer.csproj", "{3970ECF2-1A6B-4ABF-9BD1-8ED772CD9471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineBankamatik", "OnlineBankamatik\OnlineBankamatik.csproj", "{6F228D85-836C-4295-962F-F56926C58255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineBankamatik", "OnlineBankamatik\OnlineBankamatik.csproj", "{6F228D85-836C-4295-962F-F56926C58255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

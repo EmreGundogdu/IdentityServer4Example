@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using AuthServer;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -14,9 +15,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static AuthServer.RepositoryWithCache;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -29,27 +33,32 @@ namespace IdentityServerHost.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : Controller
     {
+        private readonly IDatabase database;
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        IRepository repository;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
+            IRepository repository,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            TestUserStore users = null)
+            TestUserStore users = null,
+            IDatabase database = null)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
             _users = users ?? new TestUserStore(TestUsers.Users);
-
+            this.repository = repository;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            this.database = database;
         }
 
         /// <summary>
@@ -58,6 +67,13 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+
+            var data = new { Adý = "Emre", Soyad = "Gndgd", Yas = 22,dsada="dsadsa",Yýl=2000 };
+            database.StringSet("createdata", JsonSerializer.Serialize(data));
+            Product product = new Product { Id = 1, Name="Ýsim" };
+            repository.CreateAsync(product);
+            repository.Get(product.Id);
+            repository.GetAllAsync();
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
@@ -77,6 +93,14 @@ namespace IdentityServerHost.Quickstart.UI
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
+            Product product1 = new Product()
+            {
+                Id = 1,
+                Name = model.Username
+            };
+            var data = new { Adý = "Emre", XDD = "Gndgd", Yas = 22, Model=2022,Yýl=2099, Fiyat=50000};
+            database.StringSet("data", JsonSerializer.Serialize(data));
+            repository.CreateAsync(product1);
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
