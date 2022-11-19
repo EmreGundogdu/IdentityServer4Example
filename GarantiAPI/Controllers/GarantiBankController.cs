@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AuthServer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace GarantiAPI.Controllers
     [ApiController]
     public class GarantiBankController : ControllerBase
     {
+        
         [HttpGet("{musteriId}")]
         [Authorize(Policy = "ReadGaranti")]
         public double Bakiye(int musteriId)
