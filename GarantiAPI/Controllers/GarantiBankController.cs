@@ -10,7 +10,6 @@ namespace GarantiAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
     public class GarantiBankController : ControllerBase
     {
         [HttpGet("{musteriId}")]
