@@ -23,23 +23,26 @@ namespace OnlineBankamatik
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(_ =>
+            services.AddAuthentication(options =>
             {
-                _.DefaultScheme = "OnlineBankamatikCookie";
-                _.DefaultChallengeScheme = "oidc";
+                options.DefaultScheme = "OnlineBankamatikCookie";
+                options.DefaultChallengeScheme = "oidc";
             })
             .AddCookie("OnlineBankamatikCookie")
-            .AddOpenIdConnect("oidc", _ =>
+            .AddOpenIdConnect("oidc", options=>
             {
-                _.SignInScheme = "OnlineBankamatikCookie";
-                _.Authority = "https://localhost:1000";
-                _.ClientId = "OnlineBankamatik";
-                _.ClientSecret = "onlinebankamatik";
-                _.ResponseType = "code id_token";
-                _.GetClaimsFromUserInfoEndpoint = false;
-                _.SaveTokens = true; //Auth server’dan ilgili access token deðeri client tarafýndan elde edilmiþ olacaktýr.
-                _.Scope.Add("offline_access");
+                options.SignInScheme = "OnlineBankamatikCookie";
+                options.Authority = "https://localhost:1000";
+                options.ClientId = "OnlineBankamatik";
+                options.ClientSecret = "onlinebankamatik";
+                options.ResponseType = "code id_token";
+                options.GetClaimsFromUserInfoEndpoint = false;
+                options.SaveTokens = true; //Auth server’dan ilgili access token deðeri client tarafýndan elde edilmiþ olacaktýr.
+                options.Scope.Add("offline_access");
+                options.Scope.Add("Garanti.Write");
+                options.Scope.Add("Garanti.Read");
             });
+            services.AddHttpClient();
             services.AddControllersWithViews();
         }
 
