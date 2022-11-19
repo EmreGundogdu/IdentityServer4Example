@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AuthServer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace OnlineBankamatik.Controllers
 {
     public class BankamatikController : Controller
     {
-
         public IActionResult Index()
         {
             return View();
