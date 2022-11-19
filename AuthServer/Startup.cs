@@ -21,7 +21,7 @@ namespace AuthServer
                 .AddInMemoryClients(Config.GetClients())
                 .AddTestUsers(Config.GetTestUser().ToList())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddDeveloperSigningCredential();
+                .AddDeveloperSigningCredential(); //clienttan gelen private key'i auth'dan gelen public key ile karþýlaþtýrýr
 
             services.AddControllersWithViews();
 
