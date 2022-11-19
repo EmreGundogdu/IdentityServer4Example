@@ -1,5 +1,3 @@
-using System;
-
 namespace OnlineBankamatik.Models
 {
     public class ErrorViewModel
