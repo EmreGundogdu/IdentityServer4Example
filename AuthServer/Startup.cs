@@ -1,7 +1,9 @@
+using IdentityServer4.Contrib.Caching.Redis.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Linq;
 
 namespace AuthServer
@@ -12,6 +14,17 @@ namespace AuthServer
         {
 
             services.AddIdentityServer()
+                .AddDistributedRedisCache(options =>  // <- this!
+                {
+                    options.Configuration = "127.0.0.1:6379";
+                    options.InstanceName = "my-redis-instance-name";
+                },
+                options => options.CachingKeyPrefix = "_my-identityserver-caching-prefix_",
+                options =>
+                {
+                    options.LockRetryCount = 1;
+                    options.LockRetryDelay = TimeSpan.FromSeconds(1);
+                })
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
                 .AddInMemoryClients(Config.GetClients())
