@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static IdentityModel.OidcConstants;
 using System.Security.Claims;
 using IdentityServer4;
 
@@ -59,19 +58,19 @@ namespace AuthServer
             return new List<Client>
             {
                 new Client
-                        {
+                        {//Muhasebe projesi için kullanıcak client 
                             ClientId = "GarantiBankasi",
                             ClientName = "GarantiBankasi",
-                            ClientSecrets = { new Secret("garanti".Sha256()) },
-                            AllowedGrantTypes = { GrantType.ClientCredentials },
+                            RequireClientSecret = false,
+                            AllowedGrantTypes = GrantTypes.Code,
                             AllowedScopes = { "Garanti.Write", "Garanti.Read" }
                         },
                 new Client
-                        {
+                        { //Gencay Yıldız Örnek
                             ClientId = "HalkBankasi",
                             ClientName = "HalkBankasi",
                             ClientSecrets = { new Secret("halkbank".Sha256()) },
-                            AllowedGrantTypes = { GrantType.ClientCredentials },
+                            AllowedGrantTypes =  {GrantType.ClientCredentials},
                             AllowedScopes = { "HalkBank.Write", "HalkBank.Read" }
                             //AccessTokenLifetime =  2*60*60
                         },
@@ -81,12 +80,13 @@ namespace AuthServer
                         ClientName = "OnlineBankamatik",
                         ClientSecrets = { new Secret("onlinebankamatik".Sha256()) },
                         AllowedGrantTypes = IdentityServer4.Models.GrantTypes.Hybrid, //"code id_token'a karşılık gelen"
-                        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess },RedirectUris = { "https://localhost:4000/signin-oidc" },
+                        AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, IdentityServerConstants.StandardScopes.OfflineAccess,"Garanti.Write","Garanti.Read" },RedirectUris = { "https://localhost:4000/signin-oidc" },
                         RequirePkce = false,
                         AllowOfflineAccess = true,
                         RefreshTokenUsage = TokenUsage.OneTimeOnly,
                         RefreshTokenExpiration = TokenExpiration.Absolute,
-                        AbsoluteRefreshTokenLifetime = 2 * 60 * 60 + (10 * 60)
+                        AbsoluteRefreshTokenLifetime = 2 * 60 * 60 + (10 * 60),
+                        RequireConsent = true
                     }
             };
         }
@@ -104,8 +104,8 @@ namespace AuthServer
         {
             return new List<IdentityResource>
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.OpenId(), //üretilecek token içerisinde kesinlikle bir kullanıcı id/user id/subject id olmalıdır. OpenId kullanıcı id değerini ifade eder. Token'da "subid" olarka tutlacaktır
+                new IdentityResources.Profile() //kullanıcı profil bilgilerini ve biryandan da kullanıcı için var olan tüm claimleri barındırır.
             };
         }
 
