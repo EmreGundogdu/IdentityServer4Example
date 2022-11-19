@@ -1,8 +1,9 @@
-using IdentityServer4.Contrib.Caching.Redis.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
 using System;
 using System.Linq;
 
@@ -10,20 +11,24 @@ namespace AuthServer
 {
     public class Startup
     {
+        private readonly IConfiguration Configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddIdentityServer()
-                .AddDistributedRedisCache(options =>  // <- this!
+                .AddOperationalStore(options =>
                 {
-                    options.Configuration = "127.0.0.1:6379";
-                    options.InstanceName = "my-redis-instance-name";
-                },
-                options => options.CachingKeyPrefix = "_my-identityserver-caching-prefix_",
-                options =>
+                    options.RedisConnectionString = "127.0.0.1:6379";
+                    options.Db = 0;
+                }).AddRedisCaching(options =>
                 {
-                    options.LockRetryCount = 1;
-                    options.LockRetryDelay = TimeSpan.FromSeconds(1);
+                    options.RedisConnectionString = "127.0.0.1:6379";
+                    options.KeyPrefix = "prefix";
                 })
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryApiScopes(Config.GetApiScopes())
@@ -31,7 +36,21 @@ namespace AuthServer
                 .AddTestUsers(Config.GetTestUser().ToList())
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddDeveloperSigningCredential(); //clienttan gelen private key'i auth'dan gelen public key ile karþýlaþtýrýr
-
+            services.AddSingleton(sp =>
+            {
+                return new RedisService(Configuration["CacheOptions:Url"]);
+            });
+            services.AddSingleton<IDatabase>(x =>
+            {
+                var redisService = x.GetRequiredService<RedisService>();
+                return redisService.GetDb(0);
+            });
+            services.AddScoped<IRepository>(x =>
+            {
+                var repo = new Repository();
+                var redisService = x.GetRequiredService<RedisService>();
+                return new RepositoryWithCache(repo, redisService);
+            });
             services.AddControllersWithViews();
 
         }
@@ -42,13 +61,11 @@ namespace AuthServer
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseRouting();
+            app.UseIdentityServer();
             app.UseStaticFiles(); //wwwroot'a eriþim için
             app.UseAuthentication(); //kimlik doðrulama için
             app.UseAuthorization(); //yetkilendirme için
-
-            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {
