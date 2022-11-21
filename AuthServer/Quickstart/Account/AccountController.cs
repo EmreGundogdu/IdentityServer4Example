@@ -67,13 +67,12 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
-
-            var data = new { Adý = "Emre", Soyad = "Gndgd", Yas = 22,dsada="dsadsa",Yýl=2000 };
-            database.StringSet("createdata", JsonSerializer.Serialize(data));
-            Product product = new Product { Id = 1, Name="Ýsim" };
-            repository.CreateAsync(product);
+            //var data = new { Adý = "Emre", Soyad = "Gndgd", Yas = 22, dsada = "dsadsa", Yýl = 2000 };
+            //database.StringSet("createdata", JsonSerializer.Serialize(data));
+            Product product = new Product { Id = 1, Name = "Ýsim" };
+            await repository.CreateAsync(product);
             var dsa = repository.Get(product.Id);
-            repository.GetAllAsync();
+            await repository.GetAllAsync();
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
@@ -98,9 +97,9 @@ namespace IdentityServerHost.Quickstart.UI
                 Id = 1,
                 Name = model.Username
             };
-            var data = new { Adý = "Emre", XDD = "Gndgd", Yas = 22, Model=2022,Yýl=2099, Fiyat=50000};
-            database.StringSet("data", JsonSerializer.Serialize(data));
-            repository.CreateAsync(product1);
+            //var data = new { Adý = "Emre", XDD = "Gndgd", Yas = 22, Model = 2022, Yýl = 2099, Fiyat = 50000 };
+            //database.StringSet("data", JsonSerializer.Serialize(data));
+            await repository.CreateAsync(product1);
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
