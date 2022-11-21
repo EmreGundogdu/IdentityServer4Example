@@ -49,7 +49,7 @@ namespace AuthServer
                 new Product{Id=1,Name="Klavye"},
                 new Product{Id=2,Name="Mouse"},
                 new Product{Id=3,Name="Mönitör"},
-                new Product{Id=4,Name="Masa"},
+                new Product{Id=4,Name="Masa"}
             };
             var cacheDatas = await cacheRepo.HashGetAllAsync(key);
             foreach (var item in cacheDatas)

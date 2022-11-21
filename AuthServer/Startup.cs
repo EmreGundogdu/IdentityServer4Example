@@ -23,11 +23,11 @@ namespace AuthServer
             services.AddIdentityServer()
                 .AddOperationalStore(options =>
                 {
-                    options.RedisConnectionString = "127.0.0.1:6379";
+                    options.RedisConnectionString = "10.10.4.30:6379";
                     options.Db = 0;
                 }).AddRedisCaching(options =>
                 {
-                    options.RedisConnectionString = "127.0.0.1:6379";
+                    options.RedisConnectionString = "10.10.4.30:6379";
                     options.KeyPrefix = "prefix";
                 })
                 .AddInMemoryApiResources(Config.GetApiResources())

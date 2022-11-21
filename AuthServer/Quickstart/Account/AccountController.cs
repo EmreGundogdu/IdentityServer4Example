@@ -72,7 +72,7 @@ namespace IdentityServerHost.Quickstart.UI
             database.StringSet("createdata", JsonSerializer.Serialize(data));
             Product product = new Product { Id = 1, Name="Ýsim" };
             repository.CreateAsync(product);
-            repository.Get(product.Id);
+            var dsa = repository.Get(product.Id);
             repository.GetAllAsync();
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
