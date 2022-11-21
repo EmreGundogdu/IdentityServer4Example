@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthServer", "AuthServer\Au
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineBankamatik", "OnlineBankamatik\OnlineBankamatik.csproj", "{6F228D85-836C-4295-962F-F56926C58255}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{FBDCEEA4-6E3D-4DDF-B89F-E62486BB81AD}"
+	ProjectSection(SolutionItems) = preProject
+		authserver-depl.yaml = authserver-depl.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
